@@ -1,12 +1,26 @@
 package Main.domein;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table( name = "adres" )
 public class Adres {
+
+    @Id
+    @GeneratedValue
     private int adres_id;
+
     private String postcode;
     private String huisnummer;
     private String straat;
     private String woonplaats;
+
+    @Column(insertable = false, updatable = false)
     private int reiziger_id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reiziger_id")
     private Reiziger reiziger;
 
     public Adres(int ide, String pc, String hn, String st, String wp, int ri, Reiziger reiziger){
@@ -17,6 +31,10 @@ public class Adres {
         woonplaats = wp;
         reiziger_id = ri;
         this.reiziger = reiziger;
+    }
+
+    public Adres() {
+
     }
 
     public int getAdres_id() {

@@ -1,14 +1,31 @@
 package Main.domein;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table( name = "reiziger", schema = "public" )
 public class Reiziger {
+
+    @Id
+    @GeneratedValue
+    @Column (name = "reiziger_id")
     private int id;
+
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
     private String geboortedatum;
+
+    @OneToOne(
+            mappedBy = "reiziger",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     private Adres adres;
+
+    @OneToMany(mappedBy = "reiziger", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ov_Chipkaart> ov_chipkaart;
 
     public Reiziger(int ide, String vs, String tl, String am, String gm){
@@ -17,6 +34,10 @@ public class Reiziger {
         tussenvoegsel = tl;
         achternaam = am;
         geboortedatum = gm;
+    }
+
+    public Reiziger() {
+
     }
 
     public void setAdres(Adres adres1) {
@@ -79,11 +100,14 @@ public class Reiziger {
         String s = "ID #" + id + " " + voorletters + ".";
         String a ;
 //        String o;
-
+//
 //        if(ov_chipkaart == null){
 //            o = " ov = null";
-//        }else{
-//            o = " OV Kaartnummer: " + ov_chipkaart.getKaart_nummer();
+//        }
+//        else{
+//            for(Ov_Chipkaart ov : ov_chipkaart){
+//                o += " OV Kaartnummer: " + ov.getKaart_nummer();
+//            }
 //        }
 
         if (adres  == null) {
@@ -93,11 +117,11 @@ public class Reiziger {
         }
 
         if(tussenvoegsel != null) {
-            s += " " + tussenvoegsel + " " + achternaam + " " + "(" + geboortedatum +")" + " " + a ; ;
+            s += " " + tussenvoegsel + " " + achternaam + " " + "(" + geboortedatum +")" + " " + a + " aantal ov " + getOv_chipkaart().size() ; ;
 
         }
         else{
-            s += " " + achternaam + " " + "(" + geboortedatum +")"  + " " + a ;
+            s += " " + achternaam + " " + "(" + geboortedatum +")"  + " " + a + " aantal ov " + getOv_chipkaart().size();
         }
 
         return s;

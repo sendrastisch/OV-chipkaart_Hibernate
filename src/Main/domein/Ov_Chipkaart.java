@@ -1,16 +1,36 @@
 package Main.domein;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ov_Chipkaart {
+@Entity
+@Table( name = "ov_chipkaart", schema = "public" )
+public class Ov_Chipkaart implements Serializable {
+
+    @Id
+    @GeneratedValue
+    @Column (name = "kaart_nummer")
     private int kaart_nummer;
+
     private String geldig_tot;
     private int klasse;
     private int saldo;
+
+    @Column(insertable = false, updatable = false)
     private int reiziger_id;
+
+    @ManyToOne
+    @JoinColumn(name = "reiziger_id")
     private Reiziger reiziger;
-    private List<Product> products = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "ov",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<OvProduct> producten = new ArrayList<>();
 
 
     public Ov_Chipkaart(int kNum, String gT, int kL, int sdo, int rId){
@@ -21,37 +41,41 @@ public class Ov_Chipkaart {
         reiziger_id = rId;
     }
 
+    public Ov_Chipkaart() {
+
+    }
+
     public Reiziger getReiziger(){return reiziger;}
 
     public void setReiziger(Reiziger reiziger1){this.reiziger = reiziger1;}
 
     //product methods
 
-    public List<Product> getProducts() { return products; }
+    public List<OvProduct> getProducts() { return producten; }
 
-    public void setProducts(List<Product> product) { this.products = product; }
+    public void setProducts(List<OvProduct> product) { this.producten = product; }
 
-    public void removeProduct(Product product) {
-        products.remove(product);
+    public void removeProduct(OvProduct product) {
+        producten.remove(product);
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
+    public void addProduct(OvProduct product) {
+        producten.add(product);
 
     }
 
     public void addProductAanOv(Product product) {
-        products.add(product);
-        List<Ov_Chipkaart> ov_chipkaarts = product.getOv_chipkaart();
-        ov_chipkaarts.add(this);
-        product.setOv_chipkaart(ov_chipkaarts);
+        OvProduct ovProduct = new OvProduct( this, product );
+        producten.add( ovProduct );
+        product.getOv_chipkaart().add( ovProduct );
     }
 
     public void removeProductVanProductenEnOv(Product product){
-        products.remove(product);
-        List<Ov_Chipkaart> ov_chipkaarts = product.getOv_chipkaart();
-        ov_chipkaarts.remove(this);
-        product.setOv_chipkaart(ov_chipkaarts);
+        OvProduct ovProduct = new OvProduct( this, product );
+        product.getOv_chipkaart().remove( ovProduct );
+        producten.remove( ovProduct );
+        ovProduct.setProduct( null );
+        ovProduct.setOv( null );
     }
 
     /////// eind product
@@ -97,7 +121,7 @@ public class Ov_Chipkaart {
     }
 
     public String toString(){
-        String s = "OV Nummer: " + kaart_nummer + " is geldig tot: " + geldig_tot + " klasse: " + klasse + " saldo: " + saldo + "reizigers id: " +reiziger_id;
+        String s = "OV Nummer: " + kaart_nummer + " is geldig tot: " + geldig_tot + " klasse: " + klasse + " saldo: " + saldo + " reizigers id: " +reiziger_id + "aantal producten" + producten.size();
         return s;
     }
 }

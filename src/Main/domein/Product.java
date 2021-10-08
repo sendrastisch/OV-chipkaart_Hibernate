@@ -1,14 +1,28 @@
 package Main.domein;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+@Entity
+@Table( name = "product" )
+public class Product implements Serializable {
+
+    @Id
+    @GeneratedValue
     private int product_nummer;
+
     private String naam;
     private String beschrijving;
     private int prijs;
-    private List<Ov_Chipkaart> ov_chipkaarts = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<OvProduct> ovChipkaarten = new ArrayList<>();
 
     public Product(int pN, String nm, String bs, int pr){
         product_nummer = pN;
@@ -17,14 +31,18 @@ public class Product {
         prijs = pr;
     }
 
-    //ov chipkaart methoden
+    public Product() {
 
-    public List<Ov_Chipkaart> getOv_chipkaart() {
-        return ov_chipkaarts;
     }
 
-    public void setOv_chipkaart(List<Ov_Chipkaart> ov_chipkaart) {
-        this.ov_chipkaarts = ov_chipkaart;
+    //ov chipkaart methoden
+
+    public List<OvProduct> getOv_chipkaart() {
+        return ovChipkaarten;
+    }
+
+    public void setOv_chipkaart(List<OvProduct> ov_chipkaart) {
+        this.ovChipkaarten = ov_chipkaart;
     }
 
     public void removeOv_Chipkaart(Ov_Chipkaart ov) {
