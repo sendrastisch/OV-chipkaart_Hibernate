@@ -9,14 +9,13 @@
     <property name="connection.username">postgres</property>
     <property name="connection.password">postgres</property>
     <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
-    <property name="show_sql"> true</property>
+    <property name="show_sql"> false</property>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
     <mapping class="Main.domein.Adres"/>
     <mapping class="Main.domein.Ov_Chipkaart"/>
     <mapping class="Main.domein.Product"/>
     <mapping class="Main.domein.Reiziger"/>
-    <mapping class="Main.domein.OvProduct"/>
 
   </session-factory>
 </hibernate-configuration>

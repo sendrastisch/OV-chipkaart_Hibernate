@@ -25,13 +25,13 @@ public class Ov_Chipkaart implements Serializable {
     @JoinColumn(name = "reiziger_id")
     private Reiziger reiziger;
 
-    @OneToMany(
-            mappedBy = "ov",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "ov_chipkaart_product",
+            joinColumns = { @JoinColumn(name = "kaart_nummer") },
+            inverseJoinColumns = { @JoinColumn(name = "product_nummer") }
     )
-    private List<OvProduct> producten = new ArrayList<>();
-
+    private List<Product> producten = new ArrayList<>();
 
     public Ov_Chipkaart(int kNum, String gT, int kL, int sdo, int rId){
         kaart_nummer = kNum;
@@ -51,31 +51,26 @@ public class Ov_Chipkaart implements Serializable {
 
     //product methods
 
-    public List<OvProduct> getProducts() { return producten; }
+    public List<Product> getProducts() { return producten; }
 
-    public void setProducts(List<OvProduct> product) { this.producten = product; }
+    public void setProducts(List<Product> product) { this.producten = product; }
 
-    public void removeProduct(OvProduct product) {
+    public void removeProduct(Product product) {
         producten.remove(product);
     }
 
-    public void addProduct(OvProduct product) {
+    public void addProduct(Product product) {
         producten.add(product);
 
     }
 
     public void addProductAanOv(Product product) {
-        OvProduct ovProduct = new OvProduct( this, product );
-        producten.add( ovProduct );
-        product.getOv_chipkaart().add( ovProduct );
+        producten.add( product );
     }
 
-    public void removeProductVanProductenEnOv(Product product){
-        OvProduct ovProduct = new OvProduct( this, product );
-        product.getOv_chipkaart().remove( ovProduct );
-        producten.remove( ovProduct );
-        ovProduct.setProduct( null );
-        ovProduct.setOv( null );
+    public void removeProductOv(Product product){
+        producten.remove( product );
+
     }
 
     /////// eind product
@@ -121,7 +116,7 @@ public class Ov_Chipkaart implements Serializable {
     }
 
     public String toString(){
-        String s = "OV Nummer: " + kaart_nummer + " is geldig tot: " + geldig_tot + " klasse: " + klasse + " saldo: " + saldo + " reizigers id: " +reiziger_id + "aantal producten" + producten.size();
+        String s = "OV Nummer: " + kaart_nummer + " is geldig tot: " + geldig_tot + " klasse: " + klasse + " saldo: " + saldo + " reizigers id: " +reiziger_id + " aantal producten: " + producten.size();
         return s;
     }
 }

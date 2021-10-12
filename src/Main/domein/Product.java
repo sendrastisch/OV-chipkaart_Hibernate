@@ -17,12 +17,8 @@ public class Product implements Serializable {
     private String beschrijving;
     private int prijs;
 
-    @OneToMany(
-            mappedBy = "product",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<OvProduct> ovChipkaarten = new ArrayList<>();
+    @ManyToMany(mappedBy = "producten")
+    private List<Ov_Chipkaart> ovChipkaarten = new ArrayList<>();
 
     public Product(int pN, String nm, String bs, int pr){
         product_nummer = pN;
@@ -37,16 +33,16 @@ public class Product implements Serializable {
 
     //ov chipkaart methoden
 
-    public List<OvProduct> getOv_chipkaart() {
+    public List<Ov_Chipkaart> getOv_chipkaart() {
         return ovChipkaarten;
     }
 
-    public void setOv_chipkaart(List<OvProduct> ov_chipkaart) {
+    public void setOv_chipkaart(List<Ov_Chipkaart> ov_chipkaart) {
         this.ovChipkaarten = ov_chipkaart;
     }
 
     public void removeOv_Chipkaart(Ov_Chipkaart ov) {
-        ov.removeProductVanProductenEnOv(this);
+        ov.removeProductOv(this);
     }
 
     public void addOv_ChipkaartMetProduct(Ov_Chipkaart ov) {ov.addProductAanOv(this);}
