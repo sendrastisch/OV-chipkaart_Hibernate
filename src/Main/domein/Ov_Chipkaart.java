@@ -66,11 +66,12 @@ public class Ov_Chipkaart implements Serializable {
 
     public void addProductAanOv(Product product) {
         producten.add( product );
+        product.getOv_chipkaart().add(this);
     }
 
     public void removeProductOv(Product product){
         producten.remove( product );
-
+        product.getOv_chipkaart().remove(this);
     }
 
     /////// eind product
