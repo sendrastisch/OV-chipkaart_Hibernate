@@ -1,6 +1,7 @@
 package Main.domein;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -8,14 +9,14 @@ import java.util.List;
 public class Reiziger {
 
     @Id
-    @GeneratedValue
+//    @GeneratedValue
     @Column (name = "reiziger_id")
     private int id;
 
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
-    private String geboortedatum;
+    private Date geboortedatum;
 
     @OneToOne(
             mappedBy = "reiziger",
@@ -28,7 +29,7 @@ public class Reiziger {
     @OneToMany(mappedBy = "reiziger", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ov_Chipkaart> ov_chipkaart;
 
-    public Reiziger(int ide, String vs, String tl, String am, String gm){
+    public Reiziger(int ide, String vs, String tl, String am, Date gm){
         id = ide;
         voorletters = vs;
         tussenvoegsel = tl;
@@ -88,11 +89,11 @@ public class Reiziger {
         this.achternaam = achternaam;
     }
 
-    public String getGeboortedatum() {
+    public Date getGeboortedatum() {
         return geboortedatum;
     }
 
-    public void setGeboortedatum(String geboortedatum) {
+    public void setGeboortedatum(Date geboortedatum) {
         this.geboortedatum = geboortedatum;
     }
 

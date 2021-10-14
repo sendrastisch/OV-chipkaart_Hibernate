@@ -3,6 +3,7 @@ package Main.domein;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -10,19 +11,18 @@ import java.util.List;
 public class Ov_Chipkaart implements Serializable {
 
     @Id
-    @GeneratedValue
     @Column (name = "kaart_nummer")
     private int kaart_nummer;
 
-    private String geldig_tot;
+    private Date geldig_tot;
     private int klasse;
     private int saldo;
 
-    @Column(insertable = false, updatable = false)
+//    @Column(insertable = false, updatable = true)
     private int reiziger_id;
 
     @ManyToOne
-    @JoinColumn(name = "reiziger_id")
+    @JoinColumn(name = "reiziger_id", insertable = false, updatable = false)
     private Reiziger reiziger;
 
     @ManyToMany(cascade = { CascadeType.ALL })
@@ -33,7 +33,7 @@ public class Ov_Chipkaart implements Serializable {
     )
     private List<Product> producten = new ArrayList<>();
 
-    public Ov_Chipkaart(int kNum, String gT, int kL, int sdo, int rId){
+    public Ov_Chipkaart(int kNum, Date gT, int kL, int sdo, int rId){
         kaart_nummer = kNum;
         geldig_tot = gT;
         klasse = kL;
@@ -84,11 +84,11 @@ public class Ov_Chipkaart implements Serializable {
         this.kaart_nummer = kaart_nummer;
     }
 
-    public String getGeldig_tot() {
+    public Date getGeldig_tot() {
         return geldig_tot;
     }
 
-    public void setGeldig_tot(String geldig_tot) {
+    public void setGeldig_tot(Date geldig_tot) {
         this.geldig_tot = geldig_tot;
     }
 

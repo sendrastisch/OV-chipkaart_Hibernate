@@ -1,5 +1,9 @@
 package Main;
 
+import Main.DAO.OvChipkaartHibernateDAO;
+import Main.DAO.ReizigerHibernateDAO;
+import Main.domein.Ov_Chipkaart;
+import Main.domein.Reiziger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,6 +13,7 @@ import org.hibernate.query.Query;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +47,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws SQLException {
-        testFetchAll();
+//        testFetchAll();
+        testDao();
     }
 
     /**
@@ -64,5 +70,31 @@ public class Main {
         } finally {
             session.close();
         }
+    }
+
+    private static void testDao(){
+        ReizigerHibernateDAO rdao = new ReizigerHibernateDAO(getSession());
+        OvChipkaartHibernateDAO odao = new OvChipkaartHibernateDAO(getSession());
+
+        Reiziger reizigerSan = new Reiziger(6, "SA", null, "Fernandes", java.sql.Date.valueOf("1998-10-06"));
+        Ov_Chipkaart ovSan = new Ov_Chipkaart(12345, java.sql.Date.valueOf("2021-10-01"), 1, 20, 6);
+
+        System.out.println("----------REIZIGER TEST----------");
+        System.out.println("TEST DE REIZIGERS FIND ALL!");
+        System.out.println(rdao.findAll());
+
+        System.out.println("TEST DE SAVE EN DE FINDBYID!");
+
+        rdao.save(reizigerSan);
+        odao.save(ovSan);
+        System.out.println(rdao.findById(reizigerSan.getId()));
+
+        //delete reiziger
+        rdao.delete(reizigerSan);
+
+        //delete OV
+        odao.delete(ovSan);
+
+
     }
 }
