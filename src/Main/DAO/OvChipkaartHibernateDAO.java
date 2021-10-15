@@ -49,11 +49,13 @@ public class OvChipkaartHibernateDAO implements OvChipkaartDAO {
 
     @Override
     public List<Ov_Chipkaart> findByReiziger(Reiziger reiziger) {
-        return null;
+        return session.createQuery("FROM Ov_Chipkaart WHERE reiziger_id = " + reiziger.getId(), Ov_Chipkaart.class).getResultList();
     }
 
     @Override
     public List<Ov_Chipkaart> findById(int id) {
-        return null;
+
+        return session.createQuery("FROM Ov_Chipkaart WHERE kaart_nummer = ?1", Ov_Chipkaart.class).setParameter(1, id).getResultList();
+
     }
 }

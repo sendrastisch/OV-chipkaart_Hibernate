@@ -34,7 +34,6 @@ public class AdresHibernateDAO implements AdresDAO {
         session.update(adres);
         transaction.commit();
 
-
         return true;
     }
 
@@ -45,23 +44,27 @@ public class AdresHibernateDAO implements AdresDAO {
         session.delete(adres);
         transaction.commit();
 
-
         return true;
     }
 
     @Override
     public Adres findByReiziger(Reiziger reiziger) {
 
-        return null;
+        return session.createQuery("FROM Adres WHERE reiziger_id = " + reiziger.getId(), Adres.class).getSingleResult();
+
     }
 
     @Override
     public Adres findByIdAdres(int ide) {
-        return null;
+
+        return session.createQuery("FROM Adres WHERE adres_id = ?1", Adres.class).setParameter(1, ide).getSingleResult();
+
     }
 
     @Override
     public List<Adres> findAll() {
-        return null;
+
+        return session.createQuery("FROM Adres", Adres.class).getResultList();
+
     }
 }
