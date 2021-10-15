@@ -1,5 +1,7 @@
 package Main.domein;
 
+import org.hibernate.engine.internal.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class Ov_Chipkaart implements Serializable {
     private int klasse;
     private int saldo;
 
-//    @Column(insertable = false, updatable = true)
+    //    @Column(insertable = false, updatable = true)
     private int reiziger_id;
 
     @ManyToOne

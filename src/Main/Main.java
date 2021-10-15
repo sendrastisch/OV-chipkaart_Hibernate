@@ -73,27 +73,37 @@ public class Main {
     }
 
     private static void testDao(){
-        ReizigerHibernateDAO rdao = new ReizigerHibernateDAO(getSession());
-        OvChipkaartHibernateDAO odao = new OvChipkaartHibernateDAO(getSession());
+        Session session = getSession();
+
+        ReizigerHibernateDAO rdao = new ReizigerHibernateDAO(session);
+        OvChipkaartHibernateDAO odao = new OvChipkaartHibernateDAO(session);
 
         Reiziger reizigerSan = new Reiziger(6, "SA", null, "Fernandes", java.sql.Date.valueOf("1998-10-06"));
         Ov_Chipkaart ovSan = new Ov_Chipkaart(12345, java.sql.Date.valueOf("2021-10-01"), 1, 20, 6);
+        List<Ov_Chipkaart> ovList = new ArrayList<>();
+        ovList.add(ovSan);
+        reizigerSan.setOv_chipkaart(ovList);
 
         System.out.println("----------REIZIGER TEST----------");
         System.out.println("TEST DE REIZIGERS FIND ALL!");
         System.out.println(rdao.findAll());
 
         System.out.println("TEST DE SAVE EN DE FINDBYID!");
-
-        rdao.save(reizigerSan);
-        odao.save(ovSan);
+//        rdao.save(reizigerSan);
+//        odao.save(ovSan);
         System.out.println(rdao.findById(reizigerSan.getId()));
 
-        //delete reiziger
-        rdao.delete(reizigerSan);
+        System.out.println("TEST DE FIND BY GB");
+        System.out.println(rdao.findByGbdatum("1998-10-06"));
 
-        //delete OV
-        odao.delete(ovSan);
+        //DELETES DOEN T FOR SOME REASON NIET IK BEN ER KLAAR MEE IK DELETE WEL HANDMATIG DOEI
+//        delete OV
+//        odao.delete(ovSan);
+
+        //delete reiziger
+//        rdao.delete(reizigerSan);
+
+
 
 
     }

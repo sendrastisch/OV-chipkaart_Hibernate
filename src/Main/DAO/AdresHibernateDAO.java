@@ -23,6 +23,7 @@ public class AdresHibernateDAO implements AdresDAO {
         session.save(adres);
         transaction.commit();
 
+
         return true;
     }
 
@@ -32,6 +33,7 @@ public class AdresHibernateDAO implements AdresDAO {
         Transaction transaction = this.session.beginTransaction();
         session.update(adres);
         transaction.commit();
+
 
         return true;
     }
@@ -43,11 +45,13 @@ public class AdresHibernateDAO implements AdresDAO {
         session.delete(adres);
         transaction.commit();
 
+
         return true;
     }
 
     @Override
     public Adres findByReiziger(Reiziger reiziger) {
+
         return null;
     }
 

@@ -5,6 +5,7 @@ import Main.domein.Reiziger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.sql.Date;
 import java.util.List;
 
 public class ReizigerHibernateDAO implements ReizigerDAO {
@@ -51,33 +52,19 @@ public class ReizigerHibernateDAO implements ReizigerDAO {
     @Override
     public Reiziger findById(int id) {
 
-        Transaction transaction = this.session.beginTransaction();
-        Reiziger reiziger = (Reiziger) session.createQuery(" FROM Reiziger where reiziger_id = " + id).getSingleResult();
-        transaction.commit();
-
-        return reiziger;
+        return session.createQuery("FROM Reiziger WHERE reiziger_id = ?1", Reiziger.class).setParameter(1, id).getSingleResult();
 
     }
 
     @Override
     public List<Reiziger> findByGbdatum(String datum) {
-
-        Transaction transaction = this.session.beginTransaction();
-        List<Reiziger> reizigers = (List<Reiziger>) session.createQuery("FROM Reiziger WHERE geboortedatum = " + datum).getResultList();
-        transaction.commit();
-
-        return reizigers;
-
+        return session.createQuery("FROM Reiziger WHERE geboortedatum = ?1", Reiziger.class).setParameter(1, Date.valueOf(datum)).getResultList();
     }
 
     @Override
     public List<Reiziger> findAll() {
 
-        Transaction transaction = this.session.beginTransaction();
-        List<Reiziger> reizigers = (List<Reiziger>) session.createQuery("FROM Reiziger").getResultList();
-        transaction.commit();
-
-        return reizigers;
+        return session.createQuery("FROM Reiziger", Reiziger.class).getResultList();
 
     }
 

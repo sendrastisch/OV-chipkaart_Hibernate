@@ -1,6 +1,7 @@
 package Main.domein;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import java.util.List;
 public class Reiziger {
 
     @Id
-//    @GeneratedValue
     @Column (name = "reiziger_id")
     private int id;
 
@@ -27,7 +27,7 @@ public class Reiziger {
     private Adres adres;
 
     @OneToMany(mappedBy = "reiziger", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ov_Chipkaart> ov_chipkaart;
+    private List<Ov_Chipkaart> ov_chipkaart = new ArrayList<>();
 
     public Reiziger(int ide, String vs, String tl, String am, Date gm){
         id = ide;
