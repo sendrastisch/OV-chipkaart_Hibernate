@@ -4,7 +4,9 @@ import Main.DAO.AdresHibernateDAO;
 import Main.DAO.OvChipkaartHibernateDAO;
 import Main.DAO.ProductHibernateDAO;
 import Main.DAO.ReizigerHibernateDAO;
+import Main.domein.Adres;
 import Main.domein.Ov_Chipkaart;
+import Main.domein.Product;
 import Main.domein.Reiziger;
 import jdk.swing.interop.SwingInterOpUtils;
 import org.hibernate.HibernateException;
@@ -16,8 +18,6 @@ import org.hibernate.query.Query;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Testklasse - deze klasse test alle andere klassen in deze package.
@@ -82,52 +82,82 @@ public class Main {
         OvChipkaartHibernateDAO odao = new OvChipkaartHibernateDAO(session);
         AdresHibernateDAO adao = new AdresHibernateDAO(session);
         ProductHibernateDAO pdao = new ProductHibernateDAO(session);
-
+//
         Reiziger reizigerSan = new Reiziger(6, "SA", null, "Fernandes", java.sql.Date.valueOf("1998-10-06"));
         Ov_Chipkaart ovSan = new Ov_Chipkaart(12345, java.sql.Date.valueOf("2021-10-01"), 1, 20, 6);
-        List<Ov_Chipkaart> ovList = new ArrayList<>();
-        ovList.add(ovSan);
-        reizigerSan.setOv_chipkaart(ovList);
+        Adres adresSan = new Adres(6, "3031XG", "66", "Hugo de Grootstraat", "Rotterdam", 6, reizigerSan);
+        Product product = new Product(7, "Sandra Product", "Alle sandra's mogen gratis reizen", 10);
 
-        System.out.println("----------REIZIGER TEST----------");
-        System.out.println("TEST DE REIZIGERS FIND ALL!");
+        System.out.println("-------- REIZIGER TEST ---------");
+        System.out.println("------ save reiziger en findall reizigers ------");
         System.out.println(rdao.findAll());
+        System.out.println("wauw kijk sandra zit er niet in");
+        rdao.save(reizigerSan);
+        System.out.println(rdao.findAll());
+        System.out.println("WOW SANDRA ZIT ER IN. Zou het nou zomaar zo zijn dat mijn code...werkt.....?!??");
 
-        System.out.println("TEST DE SAVE EN DE FINDBYID!");
-//        rdao.save(reizigerSan);
-//        odao.save(ovSan);
+        System.out.println("------- update de reiziger test en findbyid reiziger test --------");
+        reizigerSan.setAchternaam("met de korte achternaam");
         System.out.println(rdao.findById(reizigerSan.getId()));
+        System.out.println("Nu is mijn achternaam niet zo exotisch meer ^");
 
-        System.out.println("TEST DE FIND BY GB");
-        System.out.println(rdao.findByGbdatum("1998-10-06"));
-
-//        System.out.println("TEST DE UPDATE");
-//        System.out.println("Was eerst:");
-//        System.out.println(rdao.findById(6));
-//        Reiziger reizigerSan2 = new Reiziger(6, "SA", null, "Hihi ik ben geupdate", java.sql.Date.valueOf("1998-10-06"));
-//        rdao.update(reizigerSan2);
-//        System.out.println("is nu:");
-//        //deze update doet het ook niet en ik krijg exact dezelfde error als bij de delete.
-//        System.out.println(rdao.findById(6));
-
-        System.out.println("TEST DE ADRES KLASSE");
-        System.out.println("TEST DE FINDALL");
+        System.out.println("\n");
+        System.out.println("----------TEST ADRES----------");
+        System.out.println("--------- save adres test en findall adressen test -------");
         System.out.println(adao.findAll());
+        System.out.println("adres zit er niet in (komt omdat ik hem niet heb opgeslagen nog, niet doorvertellen)");
+        adao.save(adresSan);
+        System.out.println(adao.findAll());
+        System.out.println("Drie keer raden wat er nu wel in deze lijst zit ^");
 
-        System.out.println("TEST DE OVCHIP KLASSE");
-        System.out.println("TEST DE FINDBYID");
-        System.out.println(odao.findById(6));
+        System.out.println("--------- update adres test en findbyreiziger test ------");
+        adresSan.setStraat("Sandra Straat");
+        adao.update(adresSan);
+        System.out.println(adao.findByReiziger(reizigerSan));
+        System.out.println("Nu is mijn straat 300x leuker");
 
+        System.out.println("\n");
+        System.out.println("--------PRODUCT TEST--------");
+        System.out.println("--------- save product test en findall producten test -----------");
+        System.out.println(pdao.findAll());
+        System.out.println("alle producten zonder mijn product ^");
+        pdao.save(product);
+        System.out.println(pdao.findAll());
+        System.out.println("mijn product nu ineens wel erin ^ het is net magie");
+        System.out.println("---------- update product test --------");
+        product.setPrijs(20000);
+        System.out.println(pdao.findAll());
+        System.out.println("Nu is mijn product ineens vet duur want ik ben goud waard");
 
+        System.out.println("\n");
+        System.out.println("----OV CHIPKAART TEST---------");
+        System.out.println("--- save ov chipkaart test en findbyreiziger test ---");
+        odao.save(ovSan);
+        System.out.println(odao.findByReiziger(reizigerSan));
 
-        //DELETES DOEN T FOR SOME REASON NIET IK BEN ER KLAAR MEE IK DELETE WEL HANDMATIG DOEI
-//        delete OV
-//        odao.delete(ovSan);
+        System.out.println("--- update ov test en findbyreiziger ov test en product toevoegen aan ov test ---");
+        ovSan.setSaldo(2100000);
+        ovSan.getProducts().add(product);
+        odao.update(ovSan);
+        System.out.println(odao.findByReiziger(reizigerSan));
+        System.out.println("Nu heb ik vet veel geld op mijn ov omdat bitcoin ath heeft gehaald dus ben rich");
 
-        //delete reiziger
-//        rdao.delete(reizigerSan);
+        System.out.println("\n");
+        System.out.println("---------VERWIJDER UIT DATABASE------");
 
+        adao.delete(adresSan);
+        odao.delete(ovSan);
+        pdao.delete(product);
+        rdao.delete(reizigerSan);
 
+        System.out.println(pdao.findAll());
+        System.out.println("geen gratis reizen voor sandras meer ^");
+
+        System.out.println(odao.findByReiziger(reizigerSan));
+        System.out.println("Sandra heeft geen reisvergunning meer ^");
+
+        System.out.println(rdao.findAll());
+        System.out.println("Sandra bestaat niet meer :( ^");
 
 
     }

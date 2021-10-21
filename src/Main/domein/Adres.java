@@ -8,19 +8,16 @@ import javax.persistence.*;
 public class Adres {
 
     @Id
-    @GeneratedValue
     private int adres_id;
 
     private String postcode;
     private String huisnummer;
     private String straat;
     private String woonplaats;
-
-    @Column(insertable = false, updatable = false)
     private int reiziger_id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reiziger_id")
+    @OneToOne
+    @JoinColumn(name = "adres_id")
     private Reiziger reiziger;
 
     public Adres(int ide, String pc, String hn, String st, String wp, int ri, Reiziger reiziger){

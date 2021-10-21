@@ -1,7 +1,5 @@
 package Main.domein;
 
-import org.hibernate.engine.internal.Cascade;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,15 +17,13 @@ public class Ov_Chipkaart implements Serializable {
     private Date geldig_tot;
     private int klasse;
     private int saldo;
-
-    //    @Column(insertable = false, updatable = true)
     private int reiziger_id;
 
     @ManyToOne
     @JoinColumn(name = "reiziger_id", insertable = false, updatable = false)
     private Reiziger reiziger;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany()
     @JoinTable(
             name = "ov_chipkaart_product",
             joinColumns = { @JoinColumn(name = "kaart_nummer") },
@@ -51,32 +47,7 @@ public class Ov_Chipkaart implements Serializable {
 
     public void setReiziger(Reiziger reiziger1){this.reiziger = reiziger1;}
 
-    //product methods
-
     public List<Product> getProducts() { return producten; }
-
-    public void setProducts(List<Product> product) { this.producten = product; }
-
-    public void removeProduct(Product product) {
-        producten.remove(product);
-    }
-
-    public void addProduct(Product product) {
-        producten.add(product);
-
-    }
-
-    public void addProductAanOv(Product product) {
-        producten.add( product );
-        product.getOv_chipkaart().add(this);
-    }
-
-    public void removeProductOv(Product product){
-        producten.remove( product );
-        product.getOv_chipkaart().remove(this);
-    }
-
-    /////// eind product
 
     public int getKaart_nummer() {
         return kaart_nummer;

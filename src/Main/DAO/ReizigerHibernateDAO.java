@@ -20,8 +20,14 @@ public class ReizigerHibernateDAO implements ReizigerDAO {
     public boolean save(Reiziger reiziger) {
 
         Transaction transaction = this.session.beginTransaction();
-        session.save(reiziger);
-        transaction.commit();
+
+        try {
+            session.save(reiziger);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+        }
 
         return true;
 

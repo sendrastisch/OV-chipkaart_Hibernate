@@ -1,10 +1,8 @@
 package Main.DAO;
 
 import Main.Interface.ProductDAO;
-import Main.domein.Adres;
 import Main.domein.Ov_Chipkaart;
 import Main.domein.Product;
-import Main.domein.Reiziger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -53,16 +51,21 @@ public class ProductHibernateDAO implements ProductDAO {
     public List<Product> findByOvChipkaart(Ov_Chipkaart ov) {
 
         Transaction transaction = this.session.beginTransaction();
-        List<Product> alleProducten = session.createQuery("FROM Product", Product.class).getResultList();
-        List<Product> ovChipkaartProducten = new ArrayList<>();
-        for (Product product : alleProducten) {
+
+        List<Product> alleProducts = session.createQuery("FROM Product", Product.class).getResultList();
+        List<Product> ovChipkaartProducts = new ArrayList<>();
+
+        for (Product product : alleProducts) {
+
             if (product.getOv_chipkaart().contains(ov)) {
-                ovChipkaartProducten.add(product);
+                ovChipkaartProducts.add(product);
             }
+
         }
 
         transaction.commit();
-        return ovChipkaartProducten;
+
+        return ovChipkaartProducts;
 
     }
 

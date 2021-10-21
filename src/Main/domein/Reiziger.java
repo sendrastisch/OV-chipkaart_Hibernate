@@ -18,15 +18,12 @@ public class Reiziger {
     private String achternaam;
     private Date geboortedatum;
 
-    @OneToOne(
-            mappedBy = "reiziger",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
+    @OneToOne
+    @JoinColumn(name = "reiziger_id")
     private Adres adres;
 
-    @OneToMany(mappedBy = "reiziger", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany()
+    @JoinColumn(name = "reiziger_id")
     private List<Ov_Chipkaart> ov_chipkaart = new ArrayList<>();
 
     public Reiziger(int ide, String vs, String tl, String am, Date gm){
@@ -100,16 +97,6 @@ public class Reiziger {
     public String toString(){
         String s = "ID #" + id + " " + voorletters + ".";
         String a ;
-//        String o;
-//
-//        if(ov_chipkaart == null){
-//            o = " ov = null";
-//        }
-//        else{
-//            for(Ov_Chipkaart ov : ov_chipkaart){
-//                o += " OV Kaartnummer: " + ov.getKaart_nummer();
-//            }
-//        }
 
         if (adres  == null) {
              a = "adres = null";

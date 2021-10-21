@@ -10,14 +10,13 @@ import java.util.List;
 public class Product implements Serializable {
 
     @Id
-    @GeneratedValue
     private int product_nummer;
 
     private String naam;
     private String beschrijving;
     private int prijs;
 
-    @ManyToMany(mappedBy = "producten")
+    @ManyToMany(mappedBy = "producten", targetEntity = Ov_Chipkaart.class)
     private List<Ov_Chipkaart> ovChipkaarten = new ArrayList<>();
 
     public Product(int pN, String nm, String bs, int pr){
@@ -31,23 +30,10 @@ public class Product implements Serializable {
 
     }
 
-    //ov chipkaart methoden
 
     public List<Ov_Chipkaart> getOv_chipkaart() {
         return ovChipkaarten;
     }
-
-    public void setOv_chipkaart(List<Ov_Chipkaart> ov_chipkaart) {
-        this.ovChipkaarten = ov_chipkaart;
-    }
-
-    public void removeOv_Chipkaart(Ov_Chipkaart ov) {
-        ov.removeProductOv(this);
-    }
-
-    public void addOv_ChipkaartMetProduct(Ov_Chipkaart ov) {ov.addProductAanOv(this);}
-
-    // einde ov chipkaart methoden
 
     public int getProduct_nummer() {
         return product_nummer;
