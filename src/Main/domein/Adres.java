@@ -16,7 +16,7 @@ public class Adres {
     private String woonplaats;
     private int reiziger_id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adres_id")
     private Reiziger reiziger;
 

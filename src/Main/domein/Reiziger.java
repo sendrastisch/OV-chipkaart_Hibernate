@@ -18,12 +18,17 @@ public class Reiziger {
     private String achternaam;
     private Date geboortedatum;
 
-    @OneToOne
+    @OneToOne (
+            mappedBy = "reiziger",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     @JoinColumn(name = "reiziger_id")
     private Adres adres;
 
-    @OneToMany()
-    @JoinColumn(name = "reiziger_id")
+    @OneToMany(mappedBy = "reiziger", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "reiziger_id")
     private List<Ov_Chipkaart> ov_chipkaart = new ArrayList<>();
 
     public Reiziger(int ide, String vs, String tl, String am, Date gm){

@@ -23,7 +23,7 @@ public class Ov_Chipkaart implements Serializable {
     @JoinColumn(name = "reiziger_id", insertable = false, updatable = false)
     private Reiziger reiziger;
 
-    @ManyToMany()
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "ov_chipkaart_product",
             joinColumns = { @JoinColumn(name = "kaart_nummer") },
